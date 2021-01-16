@@ -1,0 +1,42 @@
+{%- extends "manage/base.html" -%}
+
+{%- import "manhattan/manage/components/boxes.html" as _boxes -%}
+{%- import "manhattan/manage/components/form.html" as _form with context -%}
+
+{% block main %}
+    {% call _boxes.box() %}
+
+        {% if backend %}
+
+            {# Configure the backend #}
+
+            {% call _form.form(form, method='POST', class='mh-form--primary') %}
+                {% call _form.fieldset(backend.name.capitalize() + ' settings') %}
+                    {% for field in form %}
+                        {{ _form.field(field) }}
+                    {% endfor %}
+                {% endcall -%}    
+                {% call _form.buttons() %}
+                    {{ _form.button('Save') }}
+                {% endcall %}
+            {% endcall%}
+
+        {% else %}
+
+            {# Select backend #}
+
+            {% call _form.form(form, method='GET', class='mh-form--primary') %}
+                <input type="hidden" name="account" value="{{ account._id }}">
+                <input type="hidden" name="type" value="{{ type }}">
+
+                {% call _form.fieldset('Storage backends') %}
+                    {{ _form.field(form.backend) }}
+                {% endcall -%}    
+                {% call _form.buttons() %}
+                    {{ _form.button('Next') }}
+                {% endcall %}
+            {% endcall %}
+        
+        {% endif %}
+    {% endcall %}
+{% endblock %}

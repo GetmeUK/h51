@@ -1,0 +1,21 @@
+@import 'settings';
+@import '~manhattan-manage/scss/manage';
+
+@import 'components/components';
+
+
+// -- Logo --
+
+.mh-minimal__logo-image {
+    background-size: auto 40px;
+}
+
+.mh-logo__image {
+    background-size: auto 32px;
+    background-position: center center;
+
+    @include media-tablet-landscape() {
+        background-size: auto 36px;
+        background-position: center center;
+    }
+}

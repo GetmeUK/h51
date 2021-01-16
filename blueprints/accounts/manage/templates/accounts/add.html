@@ -1,0 +1,44 @@
+{%- extends "manhattan/manage/generics/add.html" -%}
+{%- import "manhattan/manage/components/form.html" as _form with context -%}
+
+{%- block fieldsets -%}
+
+    {% call _form.fieldset('Account') -%}
+
+        {{ _form.field(form.name) }}
+
+        {% call _form.note() %}
+            <em>Account names must be unique.</em>
+        {% endcall %}
+
+    {% endcall -%}
+
+    {% call _form.fieldset('API access') -%}
+        {% call _form.aside(class='mh-formatted') %}
+            <p>
+                The default rate limit of
+                <b>{{ '{:,d}'.format(config.API_RATE_LIMIT_PER_SECOND) }}
+                requests per second</b> will be applied if you don't specifiy
+                a rate limit.
+            </p>
+        {% endcall %}
+        {{ _form.field(
+            form.api_rate_limit_per_second,
+            class='mh-field--3-3'
+        ) }}
+
+        {% call _form.aside(class='mh-formatted') %}
+            <p>
+                Limiting the IP addresses that are allowed to call the API
+                for this account significantly improves security and is
+                <b>strongly advised</b>.
+            </p>
+        {% endcall %}
+        {{ _form.field(form.api_allowed_ip_addresses) }}
+        {% call _form.note() %}
+            <em>Please add one IP address per line.</em>
+        {% endcall %}
+
+    {% endcall -%}
+
+{%- endblock %}

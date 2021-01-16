@@ -1,0 +1,52 @@
+{% macro css() -%}
+    {#
+        Call this macro in the <head> to add styles for the content editing
+        environment.
+
+        {%- import "manhattan_content.html" as _content with context -%}
+        ...
+        <head>
+            ...
+            {{ _content.css() }}
+        </head>
+    #}
+    {% if manhattan_content_init %}
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="{{ get_manage_static_asset('/content.css') }}"
+            >
+    {% endif %}
+{% endmacro %}
+
+{% macro js() -%}
+    {#
+        Call this macro at the end of the <body> to add styles for the content
+        editing environment.
+
+        {%- import "manhattan_content.html" as _content with context -%}
+        ...
+        <body>
+            ...
+            {{ _content.js() }}
+        </body>
+    #}
+    {% if manhattan_content_init %}
+        {%- if manhattan_content_base_url %}
+            <script>
+                window.MANHATTAN_CONTENT_BASE_URL = '{{ manhattan_content_base_url }}';
+                window.MANHATTAN_CONTENT_BASE_PARAMS = {};
+                {% if manhattan_content_var_name %}
+                    {% set id = get_context().get(manhattan_content_var_name)._id %}
+                    {% if id %}
+                            window.MANHATTAN_CONTENT_BASE_PARAMS['{{ manhattan_content_var_name }}'] = '{{ id }}';
+                    {% endif %}
+                {% endif %}
+                {% if manhattan_content_csrf_token %}
+                    window.MANHATTAN_CONTENT_BASE_PARAMS['csrf_token'] = '{{ manhattan_content_csrf_token }}';
+                {% endif %}
+            </script>
+        {% endif %}
+        <script src="{{ get_manage_static_asset('/content.js') }}"></script>
+    {% endif %}
+{% endmacro %}

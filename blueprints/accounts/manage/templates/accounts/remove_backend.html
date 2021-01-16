@@ -1,0 +1,29 @@
+{%- extends "manage/base.html" -%}
+
+{%- import "manhattan/manage/components/boxes.html" as _boxes -%}
+{%- import "manhattan/manage/components/form.html" as _form with context -%}
+
+
+{% block main -%}
+    {% call _boxes.box() %}
+        {% call _form.form() %}
+            {% call _form.fieldset() %}
+
+                {% call _form.buttons() %}
+                    {{ _form.button('Remove') }}
+
+                    {% call _form.note() %}
+                        <p class="large-text">
+                            Removing a storage backend will render it defunct 
+                            until a new backend is set up in it's place, 
+                            potentially preventing file uploads/processing for 
+                            this account. <b>You cannot undo this action.</b>  
+                        </p>
+                    {% endcall %}
+                {% endcall %}
+
+            {% endcall %}
+
+        {% endcall %}
+    {% endcall %}
+{% endblock %}

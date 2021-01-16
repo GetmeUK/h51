@@ -1,0 +1,28 @@
+{%- extends "manage/base.html" -%}
+
+{%- import "manhattan/manage/components/boxes.html" as _boxes -%}
+{%- import "manhattan/manage/components/form.html" as _form with context -%}
+
+
+{% block main -%}
+    {% call _boxes.box() %}
+        {% call _form.form() %}
+            {% call _form.fieldset() %}
+
+                {% call _form.buttons() %}
+                    {{ _form.button('Cycle') }}
+
+                    {% call _form.note() %}
+                        <p class="large-text">
+                            Cycling an account's API key will revoke access to 
+                            the account to existing integrations until the new 
+                            key has been added. <b>You cannot undo this action.</b> 
+                        </p>
+                    {% endcall %}
+                {% endcall %}
+
+            {% endcall %}
+
+        {% endcall %}
+    {% endcall %}
+{% endblock %}

@@ -1,0 +1,148 @@
+{% extends "manhattan/manage/generics/view.html" %}
+{% import "manhattan/manage/components/status.html" as _status %}
+
+{% block main %}
+
+    {% if has_stats %}
+
+        <ul class="activity-periods">
+
+            <li class="period{% if period == '90d' %} period--selected{% endif %}">
+                <a
+                    href="?account={{ account._id }}"
+                    class="period__link"
+                >
+                    Last 90 days
+                </a>
+            </li>
+
+            <li class="period{% if period == '12m' %} period--selected{% endif %}">
+                <a
+                    href="?account={{ account._id }}&period=12m"
+                    class="period__link"
+                >
+                    Last 12 months
+                </a>
+            </li>
+
+            <li class="period{% if period == '10y' %} period--selected{% endif %}">
+                <a
+                    href="?account={{ account._id }}&period=10y"
+                    class="period__link"
+                >
+                    Last 10 years
+                </a>
+            </li>
+
+        </ul>
+
+        {# API calls #}
+        {% call _boxes.box() %}
+            {% call _dataset.set() %}
+                {% call _dataset.head() %}
+                    {{ _dataset.heading('API calls') }}
+                    <div class="head-total">
+                        {{ '{:,d}'.format(totals.api_calls) }}
+                    </div>
+                {% endcall %}
+
+                <div
+                    data-chart
+                    data-chart--type="line"
+                    data-chart--data='{{ data_series.api_calls|tojson|safe }}'
+                    data-chart--labels='["Calls"]'
+                    class="chart  chart--line"
+                    >
+                    <div class="chart__canvas">
+                        <canvas data-chart-canvas width="400" height="100"></canvas>
+                    </div>
+                </div>
+            {% endcall %}
+        {% endcall %}
+
+        {# Assets #}
+        {% call _boxes.box() %}
+            {% call _dataset.set() %}
+                {% call _dataset.head() %}
+                    {{ _dataset.heading('Assets') }}
+                    <div class="head-total">
+                        {{ '{:,d}'.format(totals.assets) }}
+                    </div>
+                {% endcall %}
+                <div
+                    data-chart
+                    data-chart--type="line"
+                    data-chart--data='{{ data_series.assets|tojson|safe }}'
+                    data-chart--labels='["Assets"]'
+                    class="chart  chart--line"
+                    >
+                    <div class="chart__canvas">
+                        <canvas data-chart-canvas width="400" height="100"></canvas>
+                    </div>
+                </div>
+            {% endcall %}
+        {% endcall %}
+
+        {# Variations #}
+        {% call _boxes.box() %}
+            {% call _dataset.set() %}
+                {% call _dataset.head() %}
+                    {{ _dataset.heading('Variations') }}
+                    <div class="head-total">
+                        {{ '{:,d}'.format(totals.variations) }}
+                    </div>
+                {% endcall %}
+                <div
+                    data-chart
+                    data-chart--type="line"
+                    data-chart--data='{{ data_series.variations|tojson|safe }}'
+                    data-chart--labels='["Variations"]'
+                    class="chart  chart--line"
+                    >
+                    <div class="chart__canvas">
+                        <canvas data-chart-canvas width="400" height="100"></canvas>
+                    </div>
+                </div>
+            {% endcall %}
+        {% endcall %}
+
+        {# Storage #}
+        {% call _boxes.box() %}
+            {% call _dataset.set() %}
+                {% call _dataset.head() %}
+                    {{ _dataset.heading('Storage') }}
+                    <div class="head-total">
+                        {{ totals.length|humanize_bytes }}
+                    </div>
+                {% endcall %}
+                <div
+                    data-chart
+                    data-chart--type="line"
+                    data-chart--data='{{ data_series.length|tojson|safe }}'
+                    data-chart--labels='["mb"]'
+                    class="chart  chart--line"
+                    >
+                    <div class="chart__canvas">
+                        <canvas data-chart-canvas width="400" height="100"></canvas>
+                    </div>
+                </div>
+            {% endcall %}
+        {% endcall %}
+
+    {% else %}
+
+        {% call _boxes.box() %}
+            {% call _dataset.set() %}
+                {% call _dataset.row() %}
+                    {% call _dataset.column() %}
+                        {% call _dataset.value() %}
+                            <em>No activity data.</em>
+                        {% endcall %}
+                    {% endcall %}
+                {% endcall %}
+            {% endcall %}
+        {% endcall %}
+
+    {% endif %}
+
+{% endblock %}

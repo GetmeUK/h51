@@ -1,0 +1,203 @@
+{%- extends "manhattan/manage/generics/view.html" -%}
+{%- import "manhattan/manage/components/status.html" as _status -%}
+
+{% block main -%}
+
+    {% if has_stats %}
+
+        {# Highlights #}
+
+        {%- call _boxes.box() -%}
+            {% call _dataset.set() -%}
+
+                {% call _dataset.row(class='h1') %}
+                    {{ _dataset.column(
+                        'API calls <em>(Last 7 days)</em>',
+                        '{0:,}'.format(highlights.api_calls)
+                    ) }}
+                    {{ _dataset.column(
+                        'Total assets',
+                        '{0:,}'.format(highlights.assets)
+                    ) }}
+                    {{ _dataset.column(
+                        'Total variations',
+                        '{0:,}'.format(highlights.variations)
+                    ) }}
+                    {{ _dataset.column(
+                        'Total data stored',
+                        highlights.length|humanize_bytes
+                    ) }}
+                {% endcall %}
+
+            {%- endcall -%}
+        {%- endcall -%}
+
+    {% endif %}
+
+    {# API access #}
+
+    {% call _boxes.box() -%}
+
+        {% call _dataset.set() -%}
+
+            {% call _dataset.head() %}
+                {{ _dataset.heading('API access') }}
+
+                <div class="mh-btns  mh-btns--collapse">
+                    <div
+                        data-mh-copy-to-clipboard="[data-api-key]"
+                        class="mh-btn mh-btn--small mh-btn--bordered"
+                        >
+                        Copy key
+                    </div>
+                    <a
+                        href="{{ url_for('manage_accounts.cycle_api_key', account=account._id) }}"
+                        class="mh-btn mh-btn--small"
+                        >
+                        Cycle key
+                    </a>
+                </div>
+            {% endcall %}
+
+            {% call _dataset.row() %}
+                {{ _dataset.column(
+                    'Rate limit (per second)',
+                    '{:,d}'.format(account.api_rate_limit_per_second or config.API_RATE_LIMIT_PER_SECOND)
+                ) }}
+                {{ _dataset.column(
+                    'Allowed IP addresses',
+                    ', '.join(account.api_allowed_ip_addresses) if account.api_allowed_ip_addresses
+                ) }}
+            {% endcall %}
+            {% call _dataset.row() %}
+                {% call _dataset.column() %}
+                    {{ _dataset.label('API key') }}
+                    {% call _dataset.value(class='secret') -%}
+                        <span data-api-key>{{ account.api_key }}</span>
+                    {%- endcall %}
+                {% endcall %}
+            {% endcall %}
+
+        {%- endcall %}
+
+    {% endcall %}
+
+
+    {# Public config #}
+
+    {% call _boxes.box() -%}
+
+        {% call _dataset.set() -%}
+
+            {% call _dataset.head() %}
+                {{ _dataset.heading('Public storage backend') }}
+
+                <div class="mh-btns  mh-btns--collapse">
+                    {% if account.public_backend_settings %}
+                        <a
+                            href="{{ url_for(
+                                'manage_accounts.update_backend_settings',
+                                account=account._id,
+                                type='public'
+                            ) }}"
+                            class="mh-btn mh-btn--small"
+                            >
+                            Settings
+                        </a>
+                        <a
+                            href="{{ url_for(
+                                'manage_accounts.remove_backend',
+                                account=account._id,
+                                type='public'
+                            ) }}"
+                            class="mh-btn mh-btn--small mh-btn--grey"
+                            >
+                            Remove
+                        </a>
+                    {% else %}
+                        <a
+                            href="{{ url_for(
+                                'manage_accounts.update_backend_settings',
+                                account=account._id,
+                                type='public'
+                            ) }}"
+                            class="mh-btn mh-btn--small"
+                            >
+                            Add
+                        </a>
+                    {% endif %}
+                </div>
+            {% endcall%}
+
+            {% if account.public_backend_settings %}
+                {% for key, value in account.public_backend_settings.items() %}
+                    {% if not key.startswith('_') %}
+                        {{ _dataset.row(key|humanize_status, value) }}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+        {% endcall %}
+
+    {% endcall %}
+
+
+    {# Secure config #}
+
+    {% call _boxes.box() -%}
+
+        {% call _dataset.set() -%}
+
+            {% call _dataset.head() %}
+                {{ _dataset.heading('Secure storage backend') }}
+
+                <div class="mh-btns  mh-btns--collapse">
+                    {% if account.public_backend_settings %}
+                        <a
+                            href="{{ url_for(
+                                'manage_accounts.update_backend_settings',
+                                account=account._id,
+                                type='secure'
+                            ) }}"
+                            class="mh-btn mh-btn--small"
+                            >
+                            Settings
+                        </a>
+                        <a
+                            href="{{ url_for(
+                                'manage_accounts.remove_backend',
+                                account=account._id,
+                                type='secure'
+                            ) }}"
+                            class="mh-btn mh-btn--small mh-btn--grey"
+                            >
+                            Remove
+                        </a>
+                    {% else %}
+                        <a
+                            href="{{ url_for(
+                                'manage_accounts.update_backend_settings',
+                                account=account._id,
+                                type='secure'
+                            ) }}"
+                            class="mh-btn mh-btn--small"
+                            >
+                            Add
+                        </a>
+                    {% endif %}
+                </div>
+            {% endcall%}
+
+            {% if account.secure_backend_settings %}
+                {% for key, value in account.secure_backend_settings.items() %}
+                    {% if not key.startswith('_') %}
+                        {{ _dataset.row(key|humanize_status, value) }}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+        {% endcall %}
+
+    {% endcall %}
+
+{%- endblock %}

@@ -1,0 +1,57 @@
+
+.activity-periods {
+    display: flex;
+    justify-content: flex-end;
+
+    .period {
+        text-align: center;
+        margin-left: 10px;
+        width: 150px;
+
+        &:first-child {
+            margin-left: 0;
+        }
+
+        &--selected {
+            .period__link {
+                background: #ffffff;
+                font-weight: 500;
+            }
+        }
+
+        &__link {
+            background: #ffffff80;
+            border-radius: 3px;
+            display: block;
+            height: 40px;
+            line-height: 40px;
+        }
+    }
+}
+
+.chart {
+
+    &--line {
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        min-height: 350px;
+        position: relative;
+        width: 100%;
+
+        .chart {
+            &__canvas {
+                bottom: 0;
+                left: 0;
+                position: absolute;
+                right: 0;
+                top: 0;
+
+                canvas {
+                    display: block;
+                    position: absolute;
+                    height: 100%;
+                    width: 100%;
+                }
+            }
+        }
+    }
+}

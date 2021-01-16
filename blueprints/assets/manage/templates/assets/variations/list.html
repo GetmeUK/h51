@@ -1,0 +1,43 @@
+{%- extends "manage/base.html" -%}
+
+{%- import "manhattan/manage/components/boxes.html" as _boxes -%}
+{%- import "manhattan/manage/components/results.html" as _results with context -%}
+
+{% block main %}
+
+    {%- call _boxes.box() -%}
+
+        <div class="mh-list">
+            <div class="mh-list__table">
+                <table>
+                    <thead>
+                        <tr>
+                            {{ _results.heading('Name') }}
+                            {{ _results.heading('Store key') }}
+                            {% if asset.type == 'image' %}
+                               {{ _results.heading('Dimensions') }}
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for variation_name, variation in asset.variations.items() %}
+                            <tr
+                                data-mh-url="{{ url_for(
+                                    'manage_assets.view_variation',
+                                    asset=asset._id,
+                                    variation=variation_name
+                                    ) }}"
+                            >
+                                {{ _results.column(variation_name) }}
+                                {{ _results.column(variation.get_store_key(asset, variation_name)) }}
+                                {{ _results.column('{0} x {1}'.format(*variation.meta.image.size)) }}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    {% endcall %}
+
+{% endblock %}

@@ -1,0 +1,13 @@
+{%- extends "manhattan/manage/generics/list.html" -%}
+
+{% macro headings() -%}
+
+    {{ _results.heading('Name', sort_with='name') }}
+
+{%- endmacro %}
+
+{% macro columns(item) -%}
+
+    {{ _results.column(item.name) }}
+
+{%- endmacro %}

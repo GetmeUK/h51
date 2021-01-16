@@ -1,0 +1,18 @@
+
+/**
+ * Fixed column widths.
+ */
+.mh-list th {
+
+    &.narrow {
+        width: 100px;
+    }
+
+    &.medium {
+        width: 150px;
+    }
+
+    &.datetime {
+        width: 240px;
+    }
+}

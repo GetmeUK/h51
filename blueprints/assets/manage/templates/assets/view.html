@@ -1,0 +1,81 @@
+{%- extends "manhattan/manage/generics/view.html" -%}
+{%- import "manhattan/manage/components/status.html" as _status -%}
+
+{% block main -%}
+
+    {% call _boxes.box() -%}
+        {% call _dataset.set('Storage') -%}
+            {% call _dataset.row() %}
+                {{ _dataset.column('UID', asset.uid) }}
+                {{ _dataset.column('Expires', asset.expires_dt|humanize_datetime if asset.expires_dt) }}
+            {% endcall %}
+            {% call _dataset.row() %}
+                {{ _dataset.column(
+                    'Account',
+                    asset.account.name,
+                    url_for('manage_accounts.view', account=asset.account._id)
+                ) }}
+                {% call _dataset.column() %}
+                    {{ _dataset.label('Backend') }}
+                    {% call _dataset.value() %}
+                        {% if asset.secure %}
+                            Secure
+                            {% if asset.account.secure_backend_settings %}
+                                ({{ asset.account.secure_backend_settings._backend or 'Unconfigured' }})
+                            {% endif %}
+                        {% else %}
+                            Public
+                            {% if asset.account.public_backend_settings %}
+                                ({{ asset.account.public_backend_settings._backend or 'Unconfigured' }})
+                            {% endif %}
+                        {% endif %}
+                    {% endcall %}
+                {% endcall %}
+            {% endcall %}
+            {% call _dataset.row() %}
+                {{ _dataset.column('Uploaded', asset.created|humanize_datetime) }}
+                {{ _dataset.column('Last modified', asset.modified|humanize_datetime) }}
+            {% endcall %}
+        {%- endcall %}
+    {% endcall %}
+
+    {% call _boxes.box() -%}
+        {% call _dataset.set('File') -%}
+            {% call _dataset.row() %}
+                {{ _dataset.column('Filename', asset.meta.filename) }}
+                {{ _dataset.column('File size', asset.meta.length|humanize_bytes) }}
+            {% endcall %}
+            {% call _dataset.row() %}
+                {{ _dataset.column('Type', asset.type) }}
+                {{ _dataset.column('Content type', asset.content_type) }}
+            {% endcall %}
+        {%- endcall %}
+    {% endcall %}
+
+    {% if asset.type == 'image' %}
+
+        {% call _boxes.box() -%}
+            {% call _dataset.set('Image') -%}
+                {% call _dataset.row() %}
+                    {{ _dataset.column('Dimensions', '{0} x {1}'.format(*asset.meta.image.size)) }}
+                    {{ _dataset.column('Color mode', asset.meta.image.mode) }}
+                {% endcall %}
+            {%- endcall %}
+        {% endcall %}
+
+    {% endif %}
+
+    {% call _boxes.box() -%}
+        {% call _dataset.set('Meta') -%}
+            {% call _dataset.row() %}
+                {% call _dataset.column() %}
+                    {{ _dataset.value(
+                        asset.meta|tojson(indent='    '),
+                        class='json'
+                    ) }}
+                {% endcall %}
+            {% endcall %}
+        {% endcall %}
+    {% endcall %}
+
+{%- endblock %}

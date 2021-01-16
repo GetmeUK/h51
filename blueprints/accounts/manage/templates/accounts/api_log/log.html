@@ -1,0 +1,64 @@
+{%- extends "manage/base.html" -%}
+
+{%- import "manhattan/manage/components/boxes.html" as _boxes -%}
+{%- import "manhattan/manage/components/dataset.html" as _dataset -%}
+{%- import "manhattan/manage/components/results.html" as _results with context -%}
+
+{% macro render_log(log_entries) %}
+
+    <div class="mh-list">
+        <div class="mh-list__table">
+            <table>
+                {% if log_entries%}
+                    <thead>
+                        <tr>
+                            {{ _results.heading('Date/Time', class='datetime') }}
+                            {{ _results.heading('Method', class='narrow') }}
+                            {{ _results.heading('Path') }}
+                            {{ _results.heading('IP address', class='medium') }}
+                            {{ _results.heading('Call time', class='c narrow') }}
+                            {{ _results.heading('Status code', class='c narrow') }}
+                        </tr>
+                    </thead>
+                {% endif %}
+                <tbody>
+                    {% for log_entry in log_entries %}
+                        <tr
+                            data-mh-url="{{ url_for(
+                                'manage_accounts.api_log_entry',
+                                account=account._id,
+                                log_entry=log_entry.id
+                                ) }}"
+                        >
+                            {{ _results.column(log_entry.called|humanize_datetime) }}
+                            {{ _results.column(log_entry.method) }}
+                            {{ _results.column(log_entry.path) }}
+                            {{ _results.column(log_entry.ip_address) }}
+                            {{ _results.column(log_entry.call_time, class='c') }}
+                            {{ _results.column(log_entry.status_code, class='c') }}
+                        </tr>
+                    {% else %}
+                        <tr class="mh-list__empty">
+                            <td>There are no log entries</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endmacro %}
+
+{%- block main -%}
+
+    {% call _boxes.box() %}
+        {% call _dataset.set('Last {:,d} failed API calls'.format(config.API_MAX_LOG_ENTRIES)) %}{% endcall %}
+        {{ render_log(failed_log) }}
+    {% endcall %}
+
+    {% call _boxes.box() %}
+        {% call _dataset.set('Last {:,d} succeeded API calls'.format(config.API_MAX_LOG_ENTRIES)) %}{% endcall %}
+        {{ render_log(succeeded_log) }}
+    {% endcall %}
+
+{%- endblock -%}

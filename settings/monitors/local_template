@@ -1,0 +1,11 @@
+from . import DefaultConfig
+
+
+class Config(DefaultConfig):
+
+    # Debugging
+    DEBUG = True
+
+    # Networking
+    PREFERRED_URL_SCHEME = 'http'
+    SERVER_NAME = 'h51.local'

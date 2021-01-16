@@ -1,0 +1,21 @@
+{%- extends "manhattan/manage/generics/list.html" -%}
+
+{% macro headings() -%}
+
+    {{ _results.heading('Uploaded', sort_with='created') }}
+    {{ _results.heading('Store key') }}
+    {{ _results.heading('Type', class='c') }}
+    {{ _results.heading('Storage', class='c') }}
+    {{ _results.heading('Account') }}
+
+{%- endmacro %}
+
+{% macro columns(item) -%}
+
+    {{ _results.column(item.created|humanize_datetime) }}
+    {{ _results.column(item.store_key) }}
+    {{ _results.column(item.type, class='c') }}
+    {{ _results.column('Secure' if item.secure else 'Public', class='c') }}
+    {{ _results.column(item.account.name) }}
+
+{%- endmacro %}

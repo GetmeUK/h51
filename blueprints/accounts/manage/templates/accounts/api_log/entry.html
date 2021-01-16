@@ -1,0 +1,55 @@
+{%- extends "manhattan/manage/generics/view.html" -%}
+{%- import "manhattan/manage/components/status.html" as _status -%}
+
+{% block main -%}
+
+    {% call _boxes.box() -%}
+
+        {% call _dataset.set('Caller') -%}
+            {% call _dataset.row() %}
+                {{ _dataset.column('Called', log_entry.called|humanize_datetime) }}
+                {{ _dataset.column('IP address', log_entry.ip_address) }}
+            {% endcall %}
+        {%- endcall %}
+
+    {% endcall %}
+
+    {% call _boxes.box() -%}
+
+        {% call _dataset.set('Request') -%}
+            {% call _dataset.row() %}
+                {{ _dataset.column('Method', log_entry.method) }}
+                {{ _dataset.column('Path', log_entry.path) }}
+            {% endcall %}
+            {% call _dataset.row() %}
+                {% call _dataset.column() %}
+                    {{ _dataset.value(
+                        log_entry.request|tojson(indent='    '),
+                        class='json'
+                    ) }}
+                {% endcall %}
+            {% endcall %}
+        {%- endcall %}
+
+    {% endcall %}
+
+    {% call _boxes.box() -%}
+
+        {% call _dataset.set('Response') -%}
+            {% call _dataset.row() %}
+                {{ _dataset.column('Status code', log_entry.status_code) }}
+                {{ _dataset.column('Call time', log_entry.call_time) }}
+            {% endcall %}
+            {% call _dataset.row() %}
+                {% call _dataset.column() %}
+                    {{ _dataset.value(
+                        log_entry.response|tojson(indent='    '),
+                        class='json'
+                    ) }}
+                {% endcall %}
+            {% endcall %}
+        {%- endcall %}
+
+    {% endcall %}
+
+{%- endblock %}

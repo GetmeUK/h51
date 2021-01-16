@@ -1,0 +1,8 @@
+$manhattan-manage-asset-root: '~manhattan-manage/images/';
+$color-themes: (#67B3DA);
+
+@import '~manhattan-manage/scss/emails/manage';
+
+.header__logo {
+    width: 60px;
+}

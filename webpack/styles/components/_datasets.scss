@@ -1,0 +1,45 @@
+
+.mh-dataset {
+
+    .head-total {
+        background-color: #f8f8f8;
+        border-radius: 3px;
+        font-weight: 500;
+        height: 40px;
+        line-height: 40px;
+        padding: 0 20px;
+        text-align: right;
+    }
+
+    .json {
+        background: #eff2f4;
+        border-radius: 3px;
+        font-family: 'courier', monospace;
+        overflow-x: auto;
+        padding: 10px 10px 6px;
+        white-space: pre;
+        word-break: break-all;
+
+        &::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+            background-color: #aaa;
+        }
+        &::-webkit-scrollbar-thumb {
+            background: #ef4f6f;
+        }
+        -ms-overflow-style: -ms-autohiding-scrollbar;
+        scrollbar-width: thin;
+    }
+
+    .secret {
+        background: #eff2f4;
+        border-radius: 3px;
+        font-family: 'courier', monospace;
+        margin-top: 5px;
+        padding: 10px 10px 6px;
+        position: relative;
+        word-break: break-all;
+    }
+
+}

@@ -1,0 +1,73 @@
+server {
+    server_name api.h51.local;
+    listen 80;
+    client_max_body_size 200M;
+
+    # Compression
+    gzip                on;
+    gzip_http_version   1.1;
+    gzip_vary           on;
+    gzip_comp_level     6;
+    gzip_proxied        any;
+    gzip_types          text/plain application/json text/javascript;
+    gzip_buffers        16 8k;
+    gzip_disable        "MSIE [1-6]\.(?!.*SV1)";
+
+    # Proxying connections to application server
+    location / {
+        proxy_pass         http://127.0.0.1:5005/;
+        proxy_redirect     off;
+
+        proxy_set_header   Host             $host;
+        proxy_set_header   X-Real-IP        $remote_addr;
+        proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
+    }
+
+    # Error pages
+    error_page 502 /502.html;
+    location /502.html {
+        root #INSERT_YOUR_LOCAL_PATH#/nginx_static;
+    }
+}
+
+server {
+    server_name h51.local;
+    listen 80;
+    client_max_body_size 200M;
+
+    # Compression
+    gzip                on;
+    gzip_http_version   1.1;
+    gzip_vary           on;
+    gzip_comp_level     6;
+    gzip_proxied        any;
+    gzip_types          text/plain application/json text/javascript;
+    gzip_buffers        16 8k;
+    gzip_disable        "MSIE [1-6]\.(?!.*SV1)";
+
+    # Proxying connections to application server
+    location / {
+        proxy_pass         http://127.0.0.1:5001/;
+        proxy_redirect     off;
+
+        proxy_set_header   Host             $host;
+        proxy_set_header   X-Real-IP        $remote_addr;
+        proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
+    }
+
+    # Support local Local assets (box51)
+    location ~* /assets/.*.(jpg|png|svg)$ {
+        root #INSERT_YOUR_LOCAL_PATH#/nginx_static;
+    }
+
+    # Static files
+    location /favicon.ico {
+        root #INSERT_YOUR_LOCAL_PATH#/nginx_static;
+    }
+
+    # Error pages
+    error_page 502 /502.html;
+    location /502.html {
+        root #INSERT_YOUR_LOCAL_PATH#/nginx_static;
+    }
+}

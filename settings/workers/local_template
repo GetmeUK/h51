@@ -1,0 +1,7 @@
+
+from . import DefaultConfig
+
+
+class Config(DefaultConfig):
+
+    DEBUG = True

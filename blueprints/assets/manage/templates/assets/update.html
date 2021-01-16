@@ -1,0 +1,14 @@
+{%- extends "manhattan/manage/generics/update.html" -%}
+{%- import "manhattan/manage/components/form.html" as _form with context -%}
+
+{%- block fieldsets -%}
+
+    {#
+        @@ Define fields
+        {% call _form.fieldset() -%}
+            {{ _form.field(form.some_field) }}
+            ...
+        {% endcall -%}
+    #}
+
+{%- endblock %}

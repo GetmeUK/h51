@@ -1,0 +1,50 @@
+{%- extends "manhattan/manage/generics/view.html" -%}
+{%- import "manhattan/manage/components/status.html" as _status -%}
+
+{% block main -%}
+
+    {% call _boxes.box() -%}
+        {% call _dataset.set('Storage') -%}
+            {% call _dataset.row() %}
+                {{ _dataset.column('Name', variation_name) }}
+                {{ _dataset.column('Version', variation.version) }}
+            {% endcall %}
+        {% endcall %}
+    {% endcall %}
+
+    {% call _boxes.box() -%}
+        {% call _dataset.set('File') -%}
+            {% call _dataset.row() %}
+                {{ _dataset.column('File size', variation.meta.length|humanize_bytes) }}
+                {{ _dataset.column('Content type', variation.content_type) }}
+            {% endcall %}
+        {%- endcall %}
+    {% endcall %}
+
+    {% if asset.type == 'image' %}
+
+        {% call _boxes.box() -%}
+            {% call _dataset.set('Image') -%}
+                {% call _dataset.row() %}
+                    {{ _dataset.column('Dimensions', '{0} x {1}'.format(*variation.meta.image.size)) }}
+                    {{ _dataset.column('Color mode', variation.meta.image.mode) }}
+                {% endcall %}
+            {%- endcall %}
+        {% endcall %}
+
+    {% endif %}
+
+    {% call _boxes.box() -%}
+        {% call _dataset.set('Meta') -%}
+            {% call _dataset.row() %}
+                {% call _dataset.column() %}
+                    {{ _dataset.value(
+                        variation.meta|tojson(indent='    '),
+                        class='json'
+                    ) }}
+                {% endcall %}
+            {% endcall %}
+        {% endcall %}
+    {% endcall %}
+
+{% endblock %}

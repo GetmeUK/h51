@@ -1,0 +1,9 @@
+{%- extends "manhattan/manage/base.html" -%}
+
+{%- block prime_nav -%}
+    {{ _nav.prime_nav(_nav.nav_list(menu('manage'))) }}
+{%- endblock -%}
+
+{%- block user_nav -%}
+    {{ _nav.user_nav(_nav.nav_list(menu('manage_user')), g.user) }}
+{%- endblock -%}

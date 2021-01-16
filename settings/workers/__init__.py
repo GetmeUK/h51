@@ -1,0 +1,12 @@
+
+from settings import BaseConfig
+
+
+class DefaultConfig(BaseConfig):
+
+    # Workers
+    ASSET_WORKER_MAX_SPAWN_TIME = 10
+    ASSET_WORKER_MAX_STATUS_INTERVAL = 600
+    ASSET_WORKER_POPULATION_CONTROL = None
+    ASSET_WORKER_POPULATION_SPAWNER = None
+    ASSET_WORKER_SLEEP_INTERVAL = 1
