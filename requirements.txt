@@ -20,7 +20,7 @@ manhattan-users==0.0.34
 manhattan-utils==0.0.8
 mutagen==1.44.0
 MongoFrames==1.3.6
-numpy==1.18.3
+numpy==1.22.0
 opencv-python-headless==4.2.0.34
 pyotp==2.3.0
 python-slugify==4.0.0
